@@ -7,7 +7,7 @@ release:
 	@cd .. && cp $(NAME) dist/
 	@cd .. && rm $(NAME)
 	@cd ../dist && rm gitm-latest.tar.gz
-	@cd ../dist && ln -s $(NAME) gitm-latest.tar.gz
+	@cd ../dist && cp $(NAME) gitm-latest.tar.gz
 
 install:
 	@sudo ./install.sh
