@@ -17,13 +17,25 @@ can be installed by registering the python script implementing them.
 
 import config
 import sys
+from pull import pull
+from bundle_merge import bundleMerge
+from merge import merge
+
+def runPull(options):
+	remote,branch = options
+	transport = config.load(remote)
+	messages = transport.getUnreadMessages()
+	pull(messages, bundleMerge, merge, remote, branch)
+
+
 
 commands = {
 	'remote': {
 		'add': lambda options: config.add(options[0], options[1]),
 		'update': lambda options: config.update(options[0]),
 		'delete': lambda options: config.delete(options[0])
-	}
+	},
+	'pull': runPull
 }
 args = sys.argv[1:]
 

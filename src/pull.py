@@ -4,6 +4,7 @@ pull
 Updates the necessary remote branch from mailbox
 Tries to merge the remote branch into the corresponding local branch
 '''
+from remote_update import remoteUpdate
 
 '''
 pull :: ([Message], BundleMerge, Merge, string, string) -> ()
@@ -21,4 +22,4 @@ def pull(messages, bundleMerge, merge, remote, branch):
 	remoteUpdate(bundleMerge, messages)
 
 	#attempt to merge the remote branch into local branch
-	merge(['remotes', remote, branch], [branch])
+	merge(['gitm', remote, branch], [branch])

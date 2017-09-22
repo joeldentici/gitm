@@ -13,22 +13,18 @@ If we are still running, we send the bundle to the mailbox
 Everything up-to-date
 '''
 
-from subprocess import call
+from subprocess import call, check_output
 
 def push(messages, bundleMerge, sendMail, merge, remote, branch):
 	#update the repo with bundles
 	remoteUpdate(bundleMerge, messages)
 
-	remote = ['remotes', remote, branch]
-	remoteBranch = "/".join(remote)
+	remote = ['gitm', remote, branch]
+	remoteBranch = "-".join(remote)
 
 	#get the current commit of the remote branch
-	#call(['git', 'log', '-n', '1', remoteBranch])
-	#read...
-	#...
-	#commit = ''
-	commit = 'blah'
-
+	commitInfo = check_output(['git', 'log', '-n', '1', remoteBranch])
+	commit = commitInfo.split('\n')[0].split(' ')[1]
 
 	#merge local branch into remote branch
 	merge([branch], remote)

@@ -17,13 +17,13 @@ def msgError(message):
 	return error
 
 '''
-remoteUpdates :: (BundleMerge, [Message]) -> ()
+remoteUpdate :: (BundleMerge, [Message]) -> ()
 
 Merges bundles into the repository
 '''
-def remoteUpdates(bundleMerge, messages):
+def remoteUpdate(bundleMerge, messages):
 	#merge each message into the remote branch
-	for (message in messages):
+	for message in messages:
 		#get bundle from message and merge it
 		bundle = message.bundle()
 		bundleMerge(bundle, msgError(message))

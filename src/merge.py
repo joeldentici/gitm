@@ -11,8 +11,8 @@ merge :: Merge
 Merges the src branch into the destination branch
 '''
 def merge(src, dest):
-	src = "/".join(src)
-	dest = "/".join(dest)
+	src = "-".join(src)
+	dest = "-".join(dest)
 
 	branch = src + ':' + dest
 

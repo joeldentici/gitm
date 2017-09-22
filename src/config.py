@@ -64,6 +64,6 @@ def setConfig(remoteName, remoteConfig):
 
 def load(remoteName):
 	config = getConfig(remoteName)
-	transportName = config.transportName
+	transportName = config['transportName']
 
-	return transports[transportName].load(remoteName)
+	return transports[transportName].load(config)
