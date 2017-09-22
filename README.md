@@ -12,7 +12,7 @@ When a `gitm pull` happens, we will update our local remote branches from the bu
 Run commands below:
 
 ```sh
-$ wget https://(gitm-host)/gitm-latest.tar.gz
+$ wget https://github.com/joeldentici/gitm/raw/master/dist/gitm-latest.tar.gz
 $ tar -xzf gitm-latest.tar.gz
 $ cd gitm-latest
 $ sudo ./install.sh
