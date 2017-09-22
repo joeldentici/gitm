@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+HOME="/home/$SUDO_USER"
 
 echo "Installing gitm..."
 

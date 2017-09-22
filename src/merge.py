@@ -3,7 +3,8 @@ merge
 
 Merges branches of a git repos
 '''
-from subprocess import call, check_output
+from subprocess import call, Popen
+import subprocess
 
 '''
 merge :: Merge
@@ -18,7 +19,8 @@ def merge(src, dest):
 
 
 	skip = 'On branch '
-	info = check_output(['git', 'status'])
+	proc = Popen(['git', 'status'], stdout=subprocess.PIPE)
+	info = proc.stdout.read()
 	info = info[len(skip):]
 	curBranch = info[:info.index('\n')]
 

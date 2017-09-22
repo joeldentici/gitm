@@ -21,7 +21,8 @@ from pull import pull
 from push import push
 from bundle_merge import bundleMerge
 from merge import merge
-from subprocess import call, check_output
+from subprocess import call,Popen
+import subprocess
 
 def runPull(options):
 	remote,branch = options
@@ -39,7 +40,8 @@ def runPush(options):
 def runTrack(options):
 	remote, = options
 	skip = 'On branch '
-	info = check_output(['git', 'status'])
+	proc = Popen(['git', 'status'], stdout=subprocess.PIPE)
+	info = proc.stdout.read()
 	info = info[len(skip):]
 	branch = info[:info.index('\n')]
 
