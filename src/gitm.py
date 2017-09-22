@@ -39,8 +39,8 @@ def runPush(options):
 
 def runTrack(options):
 	remote, = options
-	skip = 'On branch '
-	proc = Popen(['git', 'status'], stdout=subprocess.PIPE)
+	skip = 'refs/heads/'
+	proc = Popen(['git', 'symbolic-ref', 'HEAD'], stdout=subprocess.PIPE)
 	info = proc.stdout.read()
 	info = info[len(skip):]
 	branch = info[:info.index('\n')]

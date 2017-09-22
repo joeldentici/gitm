@@ -18,8 +18,8 @@ def merge(src, dest):
 	branch = src + ':' + dest
 
 
-	skip = 'On branch '
-	proc = Popen(['git', 'status'], stdout=subprocess.PIPE)
+	skip = 'refs/heads/'
+	proc = Popen(['git', 'symbolic-ref', 'HEAD'], stdout=subprocess.PIPE)
 	info = proc.stdout.read()
 	info = info[len(skip):]
 	curBranch = info[:info.index('\n')]
