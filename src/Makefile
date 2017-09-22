@@ -3,7 +3,9 @@ CODE_VER=$(shell git describe --tags)
 NAME=gitm-$(CODE_VER).tar.gz
 
 release:
-	@cd .. && tar --exclude='.git' -czf $(NAME) $(CUR_DIR)
+	@cd .. && mv $(CUR_DIR) gitm
+	@cd .. && tar --exclude='.git' -czf $(NAME) gitm
+	@cd .. && mv gitm $(CUR_DIR)
 	@cd .. && cp $(NAME) dist/
 	@cd .. && rm $(NAME)
 	@cd ../dist && rm gitm-latest.tar.gz
