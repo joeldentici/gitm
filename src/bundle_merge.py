@@ -11,16 +11,19 @@ bundleMerge :: BundleMerge
 
 Merges a bundle into a branch
 '''
-def bundleMerge(bundle, error):
+def bundleMerge(bundle, error, remote, branch):
 	#put bundle onto filesystem
-	tmp = bundle.temp()
+	tmp = bundle.tmp()
+
+	branch = '-'.join(['gitm', remote, branch])
+	branch = branch + ':' + branch
 
 	#verify that we can merge bundle into the repo
-	code = call(['git', 'verify', tmp], shell=True)
+	code = call(['git', 'bundle', 'verify', tmp])
 	if (code):
 		error()
 
 	#merge the bundle into the repo
-	code = call(['git', 'fetch', tmp], shell=True)
+	code = call(['git', 'fetch', tmp, branch])
 	if (code):
 		error()

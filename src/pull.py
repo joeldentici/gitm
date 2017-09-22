@@ -14,12 +14,7 @@ it into the remote branch. If this succeeds for all messages, then
 the remote branch is merged into the local branch.
 '''
 def pull(messages, bundleMerge, merge, remote, branch):
-	#print message if we are up to date
-	if (len(messages) == 0):
-		print("Already up-to-date.")
-		return
-
-	remoteUpdate(bundleMerge, messages)
+	remoteUpdate(bundleMerge, messages, remote, branch)
 
 	#attempt to merge the remote branch into local branch
 	merge(['gitm', remote, branch], [branch])

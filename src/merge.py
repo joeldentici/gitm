@@ -3,7 +3,7 @@ merge
 
 Merges branches of a git repos
 '''
-from subprocess import call
+from subprocess import call, check_output
 
 '''
 merge :: Merge
@@ -16,7 +16,15 @@ def merge(src, dest):
 
 	branch = src + ':' + dest
 
-	code = call(['git', 'fetch', '.', branch], shell=True)
+
+	skip = 'On branch '
+	info = check_output(['git', 'status'])
+	info = info[len(skip):]
+	curBranch = info[:info.index('\n')]
+
+	args = ['git', 'fetch', '.', branch] if curBranch != dest else ['git', 'merge', src]
+
+	code = call(args)
 
 	if (code):
 		raise Exception('Merging ' + src + ' into ' + dest + ' failed!')

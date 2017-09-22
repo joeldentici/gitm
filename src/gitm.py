@@ -18,8 +18,10 @@ can be installed by registering the python script implementing them.
 import config
 import sys
 from pull import pull
+from push import push
 from bundle_merge import bundleMerge
 from merge import merge
+from subprocess import call, check_output
 
 def runPull(options):
 	remote,branch = options
@@ -27,7 +29,24 @@ def runPull(options):
 	messages = transport.getUnreadMessages()
 	pull(messages, bundleMerge, merge, remote, branch)
 
+def runPush(options):
+	remote,branch = options
+	transport = config.load(remote)
+	messages = transport.getUnreadMessages()
+	sendMail = lambda bundle: transport.sendBundle(bundle)
+	push(messages, bundleMerge, sendMail, merge, remote, branch)
 
+def runTrack(options):
+	remote, = options
+	skip = 'On branch '
+	info = check_output(['git', 'status'])
+	info = info[len(skip):]
+	branch = info[:info.index('\n')]
+
+	newBranch = '-'.join(['gitm', remote, branch])
+
+	call(['git', 'checkout', '-b', newBranch])
+	call(['git', 'checkout', branch])
 
 commands = {
 	'remote': {
@@ -35,7 +54,9 @@ commands = {
 		'update': lambda options: config.update(options[0]),
 		'delete': lambda options: config.delete(options[0])
 	},
-	'pull': runPull
+	'pull': runPull,
+	'push': runPush,
+	'track': runTrack
 }
 args = sys.argv[1:]
 

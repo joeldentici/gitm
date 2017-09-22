@@ -124,8 +124,6 @@ class EmailMailbox:
 			msg['To'] = to
 			msg['Subject'] = message.subject()
 
-			print message.subject()
-
 			part = MIMEBase('application', 'octet-stream')
 			part.set_payload(message.bundle().bytes())
 			encoders.encode_base64(part)

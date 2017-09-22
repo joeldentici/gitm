@@ -12,12 +12,13 @@ If we are still running, we send the bundle to the mailbox
 
 Everything up-to-date
 '''
-
+from remote_update import remoteUpdate
 from subprocess import call, check_output
+from transports.bundle import Bundle
 
 def push(messages, bundleMerge, sendMail, merge, remote, branch):
 	#update the repo with bundles
-	remoteUpdate(bundleMerge, messages)
+	remoteUpdate(bundleMerge, messages, remote, branch)
 
 	remote = ['gitm', remote, branch]
 	remoteBranch = "-".join(remote)
@@ -29,13 +30,14 @@ def push(messages, bundleMerge, sendMail, merge, remote, branch):
 	#merge local branch into remote branch
 	merge([branch], remote)
 
+
 	#create bundle
 	bundlePath = Bundle.path()
 	bundleDiff = commit + '..' + remoteBranch
-	code = call(['git', 'bundle', 'create', bundle, bundleDiff])
+	code = call(['git', 'bundle', 'create', bundlePath, bundleDiff])
 	if (code):
 		raise Exception("Bundle creation failed!")
-
+	
 	#load the bundle
 	bundle = Bundle.load(bundlePath)
 
