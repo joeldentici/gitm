@@ -39,6 +39,12 @@ You can remove a remote as well:
 $ gitm remote delete <remote-name>
 ```
 
+To be able to push and pull a branch to and from the remote, you need to set it up to track the remote:
+```sh
+$ git checkout <branch-name>
+$ gitm track <remote-name>
+```
+
 ### To pull with `gitm`
 
 ```sh
@@ -68,4 +74,3 @@ Transport installations are global for a given computer. All repos on the comput
 The following are the built in transports:
 
 * Email (email)
-* File system (fs)

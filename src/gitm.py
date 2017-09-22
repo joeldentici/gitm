@@ -60,17 +60,22 @@ commands = {
 }
 args = sys.argv[1:]
 
-i = 0
-command = commands[args[0]]
-while type(command) == dict:
-	i = i + 1
-	command = command[args[i]]
+try:
+	i = 0
+	command = commands[args[0]]
+	while type(command) == dict:
+		i = i + 1
+		command = command[args[i]]
 
-args = args[i+1:]
+	args = args[i+1:]
+except Exception as e:
+	print("Invalid arguments. See documentation for proper usage.")
+	sys.exit(1)
 
 try:
 	command(args)
 except KeyboardInterrupt as e:
 	print("")
 except Exception as e:
-	print str(e)
+	print(str(e))
+	sys.exit(1)
