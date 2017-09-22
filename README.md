@@ -14,7 +14,7 @@ Run commands below:
 ```sh
 $ wget https://github.com/joeldentici/gitm/raw/master/dist/gitm-latest.tar.gz
 $ tar -xzf gitm-latest.tar.gz
-$ cd gitm-latest
+$ cd gitm
 $ sudo ./install.sh
 ```
 
