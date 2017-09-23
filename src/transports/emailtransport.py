@@ -54,7 +54,7 @@ def storeSetFile(options, setVal):
 		f.write(json.dumps(list(setVal)))
 
 class Message:
-	def __init__(self, mailbox, mid, bundle, num = -1):
+	def __init__(self, mailbox, mid, bundle, branch, num = -1):
 		if (mid == None):
 			mid = str(uuid.uuid4())
 		self.mid = mid
@@ -62,6 +62,7 @@ class Message:
 		self._bundle = bundle
 		self._subject = None
 		self.num = -1
+		self.branch = branch
 
 	def bundle(self):
 		return self._bundle
@@ -84,11 +85,16 @@ class Message:
 		try:
 			if subject.startswith(GIT):
 				tri = subject[len(GIT):-1]
-				return tri.split("/")[0:2]
+				opts = tri.split("/")
+
+				if (len(opts) == 2):
+					return [opts[0], '', opts[1]]
+				else:
+					return opts
 		except Exception as e:
 			pass
 		
-		return [None, None]
+		return [None, None, None]
 
 	def subject(self):
 		if self._subject:
@@ -98,8 +104,9 @@ class Message:
 
 		repo = options['repoName']
 		mid = self.mid
+		branch = self.branch
 
-		info = '/'.join([repo, mid])
+		info = '/'.join([repo, branch, mid])
 
 		self._subject = GIT + info + ']'
 
@@ -111,8 +118,8 @@ class EmailMailbox:
 		self.read = readSetFile(options)
 		self.conn = None
 
-	def sendBundle(self, bundle):
-		message = Message(self, None, bundle)
+	def sendBundle(self, bundle, branch):
+		message = Message(self, None, bundle, branch)
 		server = smtplib.SMTP(self.options['smtp'], self.options['smtpPort'])
 		if (self.options['smtpEncryption']):
 			server.starttls()
@@ -139,16 +146,15 @@ class EmailMailbox:
 
 		return message
 
-	def getUnreadMessages(self):
-		def processMessage(num, mid, msg):
+	def getUnreadMessages(self, branch=''):
+		def processMessage(num, mid, msg, mbranch):
 			if mid in self.read:
 				return
-
 			for part in msg.walk():
 				if part.get('Content-Disposition') != None:
 					payload = part.get_payload(decode=True)
 					bundle = Bundle.fromBytes(payload)
-					message = Message(self, mid, bundle, num)
+					message = Message(self, mid, bundle, mbranch, num)
 					return message
 
 		if (self.options['imapEncryption']):
@@ -174,12 +180,12 @@ class EmailMailbox:
 					raise Exception("Cannot read message: " + str(num))
 				msg = email.message_from_string(data[0][1])
 				decode = email.header.decode_header(msg['Subject'])[0]
-				subject = decode[0]
+				subject = decode[0].replace('\r\n', '')
 
-				repo,mid = Message.parseSubject(subject)
+				repo,mbranch,mid = Message.parseSubject(subject)
 
-				if repo == self.options['repoName']:
-					message = processMessage(num, mid, msg)
+				if repo == self.options['repoName'] and (mbranch == branch or mbranch == ''):
+					message = processMessage(num, mid, msg, mbranch)
 					if message:
 						messages.append(message)
 

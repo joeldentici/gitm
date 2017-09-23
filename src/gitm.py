@@ -27,14 +27,15 @@ import subprocess
 def runPull(options):
 	remote,branch = options
 	transport = config.load(remote)
-	messages = transport.getUnreadMessages()
+	messages = transport.getUnreadMessages('-'.join(['gitm', remote, branch]))
 	pull(messages, bundleMerge, merge, remote, branch)
 
 def runPush(options):
 	remote,branch = options
+	sendBranch = '-'.join(['gitm', remote, branch])
 	transport = config.load(remote)
-	messages = transport.getUnreadMessages()
-	sendMail = lambda bundle: transport.sendBundle(bundle)
+	messages = transport.getUnreadMessages(sendBranch)
+	sendMail = lambda bundle: transport.sendBundle(bundle, sendBranch)
 	push(messages, bundleMerge, sendMail, merge, remote, branch)
 
 def runTrack(options):
