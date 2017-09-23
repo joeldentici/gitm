@@ -62,6 +62,8 @@ $ gitm push <remote-name> <branch>
 This will attempt to send a bundle containing the changes between the local branch and the remote branch (after updating the remote branch from the mailbox). If this is a non-fast-forward update, it will fail. In that case, do a `gitm pull` first and merge your branch first.
 
 ### To add a new transport
+THIS DOESN'T WORK YET!
+
 You can add a new transport to `gitm`. This requires registering a python script to manage the transport.
 
 ```sh
